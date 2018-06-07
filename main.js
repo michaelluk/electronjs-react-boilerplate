@@ -1,16 +1,43 @@
 // Modules to control application life and create native browser window
 const {app, BrowserWindow} = require('electron')
+const url = require('url')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
+const dev = (process.argv || []).indexOf('--dev') !== -1 || process.env.NODE_ENV === 'DEV';
 
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 800, height: 600})
 
   // and load the index.html of the app.
-  mainWindow.loadFile('index.html')
+  if (dev) {
+    const {
+      default: installExtension,
+      REACT_DEVELOPER_TOOLS,
+      REDUX_DEVTOOLS
+    } = require('electron-devtools-installer')
+
+    indexPath = url.format({
+      protocol: 'http:',
+      host: 'localhost:3000',
+      slashes: true
+    });
+    // Open the DevTools.
+    installExtension(REACT_DEVELOPER_TOOLS)
+      .then((name) => console.log(`Added Extension:  ${name}`))
+      .catch((err) => console.log('An error occurred: ', err));
+
+    installExtension(REDUX_DEVTOOLS)
+      .then((name) => console.log(`Added Extension:  ${name}`))
+      .catch((err) => console.log('An error occurred: ', err));
+    mainWindow.webContents.openDevTools()
+    mainWindow.loadURL( indexPath )
+
+  } else {
+    mainWindow.loadFile('react-boilerplate/build/index.html')
+  }
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()

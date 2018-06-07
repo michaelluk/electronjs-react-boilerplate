@@ -4,7 +4,15 @@
   "description": "A minimal Electron application",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "NODE_ENV=DEV concurrently \"cd react-boilerplate && NODE_ENV=DEV npm start\" \"sleep 2 && NODE_ENV=DEV electron --inspect .\"",
+    "start:prod": "NODE_ENV=PROD electron .",
+    "start:electron": "electron .",
+    "start:react": "cd react-boilerplate && npm start",
+    "build:react": "cd react-boilerplate && npm run build",
+    "postinstall": "electron-builder install-app-deps",
+    "pack": "npm run build:react && electron-builder --dir",
+    "pack:arm": "npm run build:react && electron-builder --dir --armv7l",
+    "dist": "npm run build:react && electron-builder"
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
@@ -17,6 +25,10 @@
   "author": "GitHub",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^2.0.0"
+    "concurrently": "^3.5.1",
+    "electron": "^2.0.0",
+    "electron-builder": "^20.15.1",
+    "electron-devtools-installer": "^2.2.4",
+    "electron-rebuild": "^1.7.3"
   }
 }
