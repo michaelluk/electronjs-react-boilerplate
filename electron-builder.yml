@@ -1,0 +1,8 @@
+linux:
+  target:
+    - AppImage
+  maintainer: "Michael Luk <michael.luk@me.com>"
+appImage:
+  systemIntegration: "doNotAsk"
+npmRebuild: true
+nodeGypRebuild: false
